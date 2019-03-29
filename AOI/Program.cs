@@ -26,20 +26,9 @@ namespace AOI
                 using (var lifetimeScope = container.BeginLifetimeScope())
                 {
                     var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Verbose();
-                    foreach (var constant in Enum.GetValues(typeof(LogEventLevel)))
-                    {
-                        var logEventLevel = (LogEventLevel)constant;
-                        lifetimeScope.TryResolveNamed(logEventLevel.ToString(), typeof(ILogEventSink), out object instance);
-                        if (logEventLevel == LogEventLevel.Verbose)
-                        {
-                            loggerConfiguration = loggerConfiguration.WriteTo.Sink(instance as ILogEventSink ?? NullSink.Instance);
-                        }
-                        else
-                        {
-                            loggerConfiguration = loggerConfiguration.WriteTo.Sink(instance as ILogEventSink ?? NullSink.Instance, logEventLevel);
-                        }
-                    }
-                    Log.Logger = loggerConfiguration.CreateLogger();
+                    if (lifetimeScope.TryResolve<ILogEventSink>(out var logEventSink))
+                        loggerConfiguration = loggerConfiguration.WriteTo.Sink(logEventSink);
+                    Log.Logger = loggerConfiguration.WriteTo.SQLite("log.db", restrictedToMinimumLevel: LogEventLevel.Warning).CreateLogger();
                     lifetimeScope.Resolve<IAOIMain>().Run();
                     Log.CloseAndFlush();
                 }

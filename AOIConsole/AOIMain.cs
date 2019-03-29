@@ -15,9 +15,7 @@ namespace AOIConsole
 
         void IAOIMain.Run()
         {
-            this.Log().Debug("Debug");
             this.Log().Info("AOI正在运行");
-            this.Log().Error("Error");
             while (true)
             {
                 _commandTextResolver.Resolve(Console.ReadLine());

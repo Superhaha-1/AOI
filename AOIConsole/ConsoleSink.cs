@@ -4,7 +4,7 @@ using System;
 
 namespace AOIConsole
 {
-    public sealed class LogEventSink : ILogEventSink
+    public sealed class ConsoleSink : ILogEventSink
     {
         void ILogEventSink.Emit(LogEvent logEvent)
         {
