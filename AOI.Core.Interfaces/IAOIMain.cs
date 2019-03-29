@@ -1,6 +1,6 @@
 ﻿namespace AOI.Core.Interfaces
 {
-    public interface IAOICore
+    public interface IAOIMain
     {
         void Run();
     }

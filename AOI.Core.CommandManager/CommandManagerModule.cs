@@ -8,7 +8,7 @@ namespace AOI.Core.CommandManager
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
-            builder.Register(c => new CommandTextResolver()).As<ICommandTextResolver>();
+            builder.Register(c => new CommandTextResolver()).As<ICommandTextResolver>().InstancePerLifetimeScope();
         }
     }
 }
