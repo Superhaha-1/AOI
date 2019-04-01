@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AOI.Core.Extensions\AOI.Core.Extensions.csproj" />
     <ProjectReference Include="..\AOI.Core.Interfaces\AOI.Core.Interfaces.csproj" />
   </ItemGroup>
 

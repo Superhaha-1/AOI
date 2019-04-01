@@ -9,7 +9,6 @@ using Splat.Serilog;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
-using System;
 
 namespace AOI
 {
