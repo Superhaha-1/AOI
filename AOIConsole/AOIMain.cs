@@ -6,7 +6,7 @@ namespace AOIConsole
 {
     public sealed class AOIMain : IAOIMain, IEnableLogger
     {
-        private ICommandTextResolver _commandTextResolver;
+        private readonly ICommandTextResolver _commandTextResolver;
 
         public AOIMain(ICommandTextResolver commandTextResolver)
         {

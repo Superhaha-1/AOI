@@ -59,6 +59,11 @@ namespace AOI.Core.Extensions
         }
     }
 
+    public interface ICommandBuilder<T> : ICommandBuilder where T : IOperation, new()
+    {
+        ContainerBuilder ContainerBuilder { get; }
+    }
+
     internal sealed class CommandBuilder<T> : ICommandBuilder<T> where T : IOperation, new()
     {
         public CommandBuilder(ContainerBuilder containerBuilder)
@@ -72,6 +77,18 @@ namespace AOI.Core.Extensions
         public string Name { get; set; }
 
         public IDictionary<string, ICommandParameterBuilder> ParameterBuilderDictionary { get; } = new Dictionary<string, ICommandParameterBuilder>();
+
+        public IOperation CreateOperation()
+        {
+            return new T();
+        }
+    }
+
+    public interface ICommandParameterBuilder<T, M> : ICommandParameterBuilder where T : IOperation, new()
+    {
+        ICommandBuilder CommandBuilder { get; }
+
+        Action<T, M> Action { set; }
     }
 
     internal sealed class CommandParameterBuilder<T, M> : ICommandParameterBuilder<T, M>, IEnableLogger where T : IOperation, new()
@@ -93,7 +110,7 @@ namespace AOI.Core.Extensions
         {
             if (operation == null)
             {
-                this.Log().Error($"Operation为空");
+                this.Log().Info($"Operation为空");
                 return;
             }
             if (operation is T t)
@@ -104,12 +121,12 @@ namespace AOI.Core.Extensions
                 }
                 else
                 {
-                    this.Log().Error($"Parameter类型不为{typeof(M)}");
+                    this.Log().Info($"Parameter类型不为{typeof(M)}");
                 }
             }
             else
             {
-                this.Log().Error($"Operation类型不为{typeof(T)}");
+                this.Log().Info($"Operation类型不为{typeof(T)}");
             }
         }
     }

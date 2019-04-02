@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI" Version="9.12.1" />
     <PackageReference Include="Serilog.Sinks.SQLite" Version="4.5.0" />
     <PackageReference Include="Splat.Autofac" Version="7.0.1" />
     <PackageReference Include="Splat.Serilog" Version="7.0.1" />
