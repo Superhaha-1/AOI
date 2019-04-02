@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="Splat" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>

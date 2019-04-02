@@ -9,7 +9,7 @@ namespace AOI.Core.CommandManager
         {
             base.Load(builder);
             builder.Register(c => new CommandTextResolver()).As<ICommandTextResolver>().InstancePerLifetimeScope();
-            builder.Register(c => new CommandInitialize()).As<ICommandInitialize>().InstancePerLifetimeScope();
+            builder.Register(c => new CommandInitializer()).As<ICommandInitializer>().InstancePerLifetimeScope();
         }
     }
 }
