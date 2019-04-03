@@ -6,11 +6,11 @@ namespace AOIConsole
 {
     public sealed class AOIMain : IAOIMain, IEnableLogger
     {
-        private readonly ICommandTextResolver _commandTextResolver;
+        private readonly ICommandTextResolver _operationTextResolver;
 
-        public AOIMain(ICommandTextResolver commandTextResolver)
+        public AOIMain(ICommandTextResolver operationTextResolver)
         {
-            _commandTextResolver = commandTextResolver;
+            _operationTextResolver = operationTextResolver;
         }
 
         void IAOIMain.Run()
@@ -18,7 +18,7 @@ namespace AOIConsole
             this.Log().Info("AOI正在运行");
             while (true)
             {
-                _commandTextResolver.Resolve(Console.ReadLine());
+                _operationTextResolver.Resolve(Console.ReadLine());
             }
         }
     }

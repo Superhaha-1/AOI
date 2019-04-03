@@ -13,18 +13,18 @@ namespace AOIConsole
             base.Load(builder);
             builder.Register(c => new AOIMain(c.Resolve<ICommandTextResolver>())).As<IAOIMain>().SingleInstance();
             builder.Register(c => new ConsoleSink()).As<ILogEventSink>().SingleInstance();
-            builder.CreateCommandBuilder<SignIn>().Build();
+            builder.CreateOperationBuilder<LogIn>().SetDescription("登录AOI").Build();
         }
     }
 
-    public sealed class SignIn : IOperation, IEnableLogger
+    public sealed class LogIn : IOperation, IEnableLogger
     {
-        void IOperation.Redo()
+        void IOperation.Make()
         {
             this.Log().Info("已登录");
         }
 
-        void IOperation.Revoke()
+        void IOperation.Unmake()
         {
         }
     }

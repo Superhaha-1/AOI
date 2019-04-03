@@ -14,7 +14,7 @@ namespace AOI
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterAssemblyModules(Directory.GetFiles("DirectoryModules").Select(path => Assembly.LoadFile(Path.GetFullPath(path))).ToArray());
@@ -26,7 +26,9 @@ namespace AOI
                 {
                     var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Verbose();
                     if (lifetimeScope.TryResolve<ILogEventSink>(out var logEventSink))
+                    {
                         loggerConfiguration = loggerConfiguration.WriteTo.Sink(logEventSink);
+                    }
                     Log.Logger = loggerConfiguration.WriteTo.SQLite("log.db", restrictedToMinimumLevel: LogEventLevel.Warning).CreateLogger();
                     lifetimeScope.Resolve<IAOIMain>().Run();
                     Log.CloseAndFlush();

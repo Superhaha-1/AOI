@@ -2,8 +2,8 @@
 {
     public interface IOperation
     {
-        void Redo();
+        void Make();
 
-        void Revoke();
+        void Unmake();
     }
 }

@@ -1,21 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.539
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOI", "AOI\AOI.csproj", "{DCBBB6A9-B42F-4AF5-93A4-6CFF69B87607}"
 	ProjectSection(ProjectDependencies) = postProject
-		{4582F005-3C27-461F-9641-EA779B763499} = {4582F005-3C27-461F-9641-EA779B763499}
 		{DF955F42-F253-471D-B4AD-A278A0B2783B} = {DF955F42-F253-471D-B4AD-A278A0B2783B}
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOI.Core.CommandManager", "AOI.Core.CommandManager\AOI.Core.CommandManager.csproj", "{4582F005-3C27-461F-9641-EA779B763499}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOI.Core.Interfaces", "AOI.Core.Interfaces\AOI.Core.Interfaces.csproj", "{80BEFA5C-DBF5-41A9-9F66-3F2BCA2F861B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOIConsole", "AOIConsole\AOIConsole.csproj", "{DF955F42-F253-471D-B4AD-A278A0B2783B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOI.Core.Extensions", "AOI.Core.Extensions\AOI.Core.Extensions.csproj", "{3729EE8F-C968-4E42-B89B-2179F3CDDC97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOI.Core.Extensions", "AOI.Core.Extensions\AOI.Core.Extensions.csproj", "{3729EE8F-C968-4E42-B89B-2179F3CDDC97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOI.Core.OperationManager", "AOI.Core.OperationManager\AOI.Core.OperationManager.csproj", "{E3D057F7-AA1C-47C2-87AA-FA48837CAE07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +26,6 @@ Global
 		{DCBBB6A9-B42F-4AF5-93A4-6CFF69B87607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCBBB6A9-B42F-4AF5-93A4-6CFF69B87607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCBBB6A9-B42F-4AF5-93A4-6CFF69B87607}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4582F005-3C27-461F-9641-EA779B763499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4582F005-3C27-461F-9641-EA779B763499}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4582F005-3C27-461F-9641-EA779B763499}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4582F005-3C27-461F-9641-EA779B763499}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80BEFA5C-DBF5-41A9-9F66-3F2BCA2F861B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80BEFA5C-DBF5-41A9-9F66-3F2BCA2F861B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80BEFA5C-DBF5-41A9-9F66-3F2BCA2F861B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,6 +38,10 @@ Global
 		{3729EE8F-C968-4E42-B89B-2179F3CDDC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3729EE8F-C968-4E42-B89B-2179F3CDDC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3729EE8F-C968-4E42-B89B-2179F3CDDC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3D057F7-AA1C-47C2-87AA-FA48837CAE07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3D057F7-AA1C-47C2-87AA-FA48837CAE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3D057F7-AA1C-47C2-87AA-FA48837CAE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3D057F7-AA1C-47C2-87AA-FA48837CAE07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
