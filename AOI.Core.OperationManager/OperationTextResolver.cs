@@ -1,7 +1,5 @@
 ﻿using AOI.Core.Interfaces;
 using Splat;
-using System;
-using System.Collections.Generic;
 
 namespace AOI.Core.OperationManager
 {

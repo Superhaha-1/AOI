@@ -63,7 +63,7 @@ namespace AOI.Core.Extensions
         internal OperationBuilder(ContainerBuilder containerBuilder, string name)
         {
             ContainerBuilder = containerBuilder;
-            Name = (name ?? typeof(TOperation).Name).ToUpperInvariant();
+            Name = (name ?? typeof(TOperation).Name).ToUpperInvariant();                    
         }
 
         internal ContainerBuilder ContainerBuilder { get; set; }
