@@ -9,7 +9,7 @@ namespace AOI.Core.OperationManager
         {
             base.Load(builder);
             builder.Register(c => new OperationTextResolver(c.Resolve<IOperationInvoker>())).As<ICommandTextResolver>().SingleInstance();
-            builder.Register(c => new OperationSchedule()).As<IOperationInitializer>().As<IOperationInvoker>().SingleInstance();
+            builder.Register(c => new OperationSchedule(c)).As<IOperationInitializer>().As<IOperationInvoker>().SingleInstance();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace AOIConsole
             base.Load(builder);
             builder.Register(c => new AOIMain(c.Resolve<ICommandTextResolver>())).As<IAOIMain>().SingleInstance();
             builder.Register(c => new ConsoleSink()).As<ILogEventSink>().SingleInstance();
-            builder.CreateOperationBuilder<LogIn>().SetDescription("登录AOI").Build();
+            builder.CreateOperationBuilder(c => new LogIn()).Build();
         }
     }
 

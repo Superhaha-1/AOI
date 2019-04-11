@@ -1,6 +1,7 @@
 ﻿using AOI.Core.Interfaces;
 using System.Collections.Generic;
 using Splat;
+using Autofac;
 
 namespace AOI.Core.OperationManager
 {
@@ -8,9 +9,11 @@ namespace AOI.Core.OperationManager
     {
         private readonly Dictionary<string, IOperationBuilder> _operationBuilderDictionary = new Dictionary<string, IOperationBuilder>();
 
-        public OperationSchedule()
-        {
+        private readonly IComponentContext _componentContext;
 
+        public OperationSchedule(IComponentContext componentContext)
+        {
+            _componentContext = componentContext;
         }
 
         void IOperationInitializer.InitializeOperation(IOperationBuilder operationBuilder)
@@ -29,7 +32,7 @@ namespace AOI.Core.OperationManager
             name = name.ToUpperInvariant();
             if (_operationBuilderDictionary.TryGetValue(name, out var operationBuilder))
             {
-                var operation = operationBuilder.CreateOperation();
+                var operation = operationBuilder.CreateOperation(_componentContext);
                 if (parameters != null)
                     foreach (var (Name, Value) in parameters)
                     {

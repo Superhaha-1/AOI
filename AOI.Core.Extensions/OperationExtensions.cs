@@ -8,15 +8,9 @@ namespace AOI.Core.Extensions
 {
     public static class OperationExtensions
     {
-        public static OperationBuilder<TOperation> CreateOperationBuilder<TOperation>(this ContainerBuilder containerBuilder, string name = null) where TOperation : IOperation, new()
+        public static OperationBuilder<TOperation> CreateOperationBuilder<TOperation>(this ContainerBuilder containerBuilder, Func<IComponentContext, TOperation> ctor, string name = null, string description = null) where TOperation : IOperation, new()
         {
-            return new OperationBuilder<TOperation>(containerBuilder, name);
-        }
-
-        public static OperationBuilder<TOperation> SetDescription<TOperation>(this OperationBuilder<TOperation> operationBuilder, string description) where TOperation : IOperation, new()
-        {
-            operationBuilder.Description = description;
-            return operationBuilder;
+            return new OperationBuilder<TOperation>(containerBuilder, ctor, name, description);
         }
 
         public static OperationParameterBuilder<TOperation, TValue> CreateParameterBuilder<TOperation, TValue>(this OperationBuilder<TOperation> operationBuilder, string name) where TOperation : IOperation, new()
@@ -60,11 +54,15 @@ namespace AOI.Core.Extensions
 
     public sealed class OperationBuilder<TOperation> : IOperationBuilder where TOperation : IOperation, new()
     {
-        internal OperationBuilder(ContainerBuilder containerBuilder, string name)
+        internal OperationBuilder(ContainerBuilder containerBuilder, Func<IComponentContext, TOperation> ctor, string name, string description)
         {
             ContainerBuilder = containerBuilder;
-            Name = (name ?? typeof(TOperation).Name).ToUpperInvariant();                    
+            _ctor = ctor;
+            Name = (name ?? typeof(TOperation).Name).ToUpperInvariant();
+            Description = description;
         }
+
+        private readonly Func<IComponentContext, TOperation> _ctor;
 
         internal ContainerBuilder ContainerBuilder { get; set; }
 
@@ -72,7 +70,7 @@ namespace AOI.Core.Extensions
 
         string IOperationBuilder.Name => Name;
 
-        internal string Description { get; set; }
+        internal string Description { get; }
 
         string IOperationBuilder.Description => Description;
 
@@ -80,9 +78,9 @@ namespace AOI.Core.Extensions
 
         IDictionary<string, IOperationParameterBuilder> IOperationBuilder.ParameterBuilderDictionary => ParameterBuilderDictionary;
 
-        IOperation IOperationBuilder.CreateOperation()
+        IOperation IOperationBuilder.CreateOperation(IComponentContext componentContext)
         {
-            return new TOperation();
+            return _ctor.Invoke(componentContext);
         }
     }
 

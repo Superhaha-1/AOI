@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.1" />
-    <PackageReference Include="Splat" Version="7.0.1" />
+    <PackageReference Include="Splat" Version="7.0.8" />
   </ItemGroup>
 
   <ItemGroup>

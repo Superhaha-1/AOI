@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Autofac;
+using System.Collections.Generic;
 
 namespace AOI.Core.Interfaces
 {
@@ -9,7 +9,7 @@ namespace AOI.Core.Interfaces
 
         string Description { get; }
 
-        IOperation CreateOperation();
+        IOperation CreateOperation(IComponentContext componentContext);
 
         IDictionary<string, IOperationParameterBuilder> ParameterBuilderDictionary { get; }
     }
