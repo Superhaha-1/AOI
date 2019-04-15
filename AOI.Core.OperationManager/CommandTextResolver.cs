@@ -3,11 +3,11 @@ using Splat;
 
 namespace AOI.Core.OperationManager
 {
-    public sealed class OperationTextResolver : ICommandTextResolver, IEnableLogger
+    public sealed class CommandTextResolver : ICommandTextResolver, IEnableLogger
     {
         private readonly IOperationInvoker _operationInvoker;
 
-        public OperationTextResolver(IOperationInvoker operationInvoker)
+        public CommandTextResolver(IOperationInvoker operationInvoker)
         {
             _operationInvoker = operationInvoker;
         }

@@ -8,61 +8,51 @@ namespace AOI.Core.Extensions
 {
     public static class OperationExtensions
     {
-        public static OperationBuilder<TOperation> CreateOperationBuilder<TOperation>(this ContainerBuilder containerBuilder, Func<IComponentContext, TOperation> ctor, string name = null, string description = null) where TOperation : IOperation, new()
+        public static OperationBuilder<TOperation> CreateOperationBuilder<TOperation>(this ContainerBuilder containerBuilder, Func<IComponentContext, TOperation> ctor, string name = null, string description = null) where TOperation : IOperation
         {
             return new OperationBuilder<TOperation>(containerBuilder, ctor, name, description);
         }
 
-        public static OperationParameterBuilder<TOperation, TValue> CreateParameterBuilder<TOperation, TValue>(this OperationBuilder<TOperation> operationBuilder, string name) where TOperation : IOperation, new()
+        public static OperationBuilder<TOperation> SetOperationParameter<TOperation, TValue>(this OperationBuilder<TOperation> operationBuilder, string name, Action<TOperation, TValue> set, string description = null) where TOperation : IOperation
         {
-            OperationParameterBuilder<TOperation, TValue> parameterBuilder;
-            if (operationBuilder.ParameterBuilderDictionary.TryGetValue(name, out var builder))
+            if (operationBuilder.ParameterBuilderDictionary.ContainsKey(name))
             {
-                parameterBuilder = builder as OperationParameterBuilder<TOperation, TValue>;
-                LogHost.Default.Warn($"操作-{operationBuilder.Name}-已存在参数-{name}");
-                parameterBuilder.OperationBuilder = operationBuilder;
+                throw new Exception($"操作-{operationBuilder.Name}-已存在参数-{name}");
             }
-            else
+            if(set == null)
             {
-                parameterBuilder = new OperationParameterBuilder<TOperation, TValue>(operationBuilder, name);
-                operationBuilder.ParameterBuilderDictionary.Add(name, parameterBuilder);
+                throw new Exception($"操作-{operationBuilder.Name}-参数-{name}-没有可用的Set");
             }
-            return parameterBuilder;
-        }
-
-        public static OperationParameterBuilder<TOperation, TValue> SetDescription<TOperation, TValue>(this OperationParameterBuilder<TOperation, TValue> parameterBuilder, string description) where TOperation : IOperation, new()
-        {
-            parameterBuilder.Description = description;
-            return parameterBuilder;
-        }
-
-        public static IOperationBuilder Build<TOperation, TValue>(this OperationParameterBuilder<TOperation, TValue> parameterBuilder, Action<TOperation, TValue> action) where TOperation : IOperation, new()
-        {
-            parameterBuilder.SetAction(action);
-            var operationBuilder = parameterBuilder.OperationBuilder;
-            parameterBuilder.OperationBuilder = null;
+            var parameterBuilder = new OperationParameterBuilder<TOperation, TValue>(name, set, description);
+            operationBuilder.ParameterBuilderDictionary.Add(name, parameterBuilder);
             return operationBuilder;
         }
 
-        public static void Build<TOperation>(this OperationBuilder<TOperation> operationBuilder) where TOperation : IOperation, new()
+        public static void Build<TOperation>(this OperationBuilder<TOperation> operationBuilder) where TOperation : IOperation
         {
+            if(!operationBuilder.HasCtor)
+            {
+                throw new Exception($"操作-{operationBuilder.Name}-没有可用的Ctor");
+            }
             var containerBuilder = operationBuilder.ContainerBuilder;
             operationBuilder.ContainerBuilder = null;
             containerBuilder.RegisterBuildCallback(c => c.Resolve<IOperationInitializer>().InitializeOperation(operationBuilder));
         }
     }
 
-    public sealed class OperationBuilder<TOperation> : IOperationBuilder where TOperation : IOperation, new()
+    public sealed class OperationBuilder<TOperation> : IOperationBuilder, IEnableLogger where TOperation : IOperation
     {
         internal OperationBuilder(ContainerBuilder containerBuilder, Func<IComponentContext, TOperation> ctor, string name, string description)
         {
             ContainerBuilder = containerBuilder;
             _ctor = ctor;
             Name = (name ?? typeof(TOperation).Name).ToUpperInvariant();
-            Description = description;
+            _description = description;
         }
 
         private readonly Func<IComponentContext, TOperation> _ctor;
+
+        internal bool HasCtor => _ctor != null;
 
         internal ContainerBuilder ContainerBuilder { get; set; }
 
@@ -70,9 +60,9 @@ namespace AOI.Core.Extensions
 
         string IOperationBuilder.Name => Name;
 
-        internal string Description { get; }
+        private readonly string _description;
 
-        string IOperationBuilder.Description => Description;
+        string IOperationBuilder.Description => _description;
 
         internal Dictionary<string, IOperationParameterBuilder> ParameterBuilderDictionary { get; } = new Dictionary<string, IOperationParameterBuilder>();
 
@@ -84,30 +74,24 @@ namespace AOI.Core.Extensions
         }
     }
 
-    public sealed class OperationParameterBuilder<TOperation, TValue> : IOperationParameterBuilder, IEnableLogger where TOperation : IOperation, new()
+    public sealed class OperationParameterBuilder<TOperation, TValue> : IOperationParameterBuilder, IEnableLogger where TOperation : IOperation
     {
-        internal OperationParameterBuilder(OperationBuilder<TOperation> operationBuilder, string name)
+        internal OperationParameterBuilder(string name, Action<TOperation, TValue> set, string description)
         {
-            OperationBuilder = operationBuilder;
-            Name = name?.ToUpperInvariant();
+            _name = name?.ToUpperInvariant();
+            _set = set;
+            _description = description;
         }
 
-        internal OperationBuilder<TOperation> OperationBuilder { get; set; }
+        private readonly string _name;
 
-        internal string Name { get; }
+        string IOperationParameterBuilder.Name => _name;
 
-        string IOperationParameterBuilder.Name => Name;
+        private readonly string _description;
 
-        internal string Description { get; set; }
+        string IOperationParameterBuilder.Description => _description;
 
-        string IOperationParameterBuilder.Description => Description;
-
-        private Action<TOperation, TValue> _action;
-
-        internal void SetAction(Action<TOperation, TValue> action)
-        {
-            _action = action;
-        }
+        private Action<TOperation, TValue> _set;
 
         void IOperationParameterBuilder.SetParameter(IOperation operation, object parameter)
         {
@@ -120,7 +104,7 @@ namespace AOI.Core.Extensions
             {
                 if (parameter is TValue m)
                 {
-                    _action.Invoke(t, m);
+                    _set.Invoke(t, m);
                 }
                 else
                 {

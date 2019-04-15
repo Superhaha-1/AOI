@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using Splat;
 using Autofac;
+using AOI.Core.OperationManager.Interfaces;
 
 namespace AOI.Core.OperationManager
 {
-    public sealed class OperationSchedule : IOperationInitializer, IOperationInvoker, IEnableLogger
+    public sealed class OperationSchedule : IOperationInitializer, IOperationInvoker, IOperationBuilderDictionary, IEnableLogger
     {
+        #region 实现IOperationBuilderDictionary
+
+        IReadOnlyDictionary<string, IOperationBuilder> IOperationBuilderDictionary.Operations => _operationBuilderDictionary;
+
+        #endregion
+
         private readonly Dictionary<string, IOperationBuilder> _operationBuilderDictionary = new Dictionary<string, IOperationBuilder>();
 
         private readonly IComponentContext _componentContext;
@@ -21,7 +28,7 @@ namespace AOI.Core.OperationManager
             var operationName = operationBuilder.Name;
             if (_operationBuilderDictionary.ContainsKey(operationName))
             {
-                this.Log().Warn($"已存在命令-{operationName},无法初始化");
+                this.Log().Warn($"操作-{operationName}-已存在");
                 return;
             }
             _operationBuilderDictionary.Add(operationName, operationBuilder);
@@ -43,7 +50,7 @@ namespace AOI.Core.OperationManager
                         }
                         else
                         {
-                            this.Log().Info($"不支持的参数-{name}");
+                            this.Log().Info($"操作-{name}-参数-{name}-不支持");
                             return;
                         }
                     }
@@ -51,7 +58,7 @@ namespace AOI.Core.OperationManager
             }
             else
             {
-                this.Log().Info($"不支持的命令-{name}");
+                this.Log().Info($"操作-{name}-不支持");
             }
         }
     }

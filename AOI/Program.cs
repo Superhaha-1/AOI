@@ -22,17 +22,14 @@ namespace AOI
             {
                 container.UseAutofacDependencyResolver();
                 Locator.CurrentMutable.UseSerilogFullLogger();
-                using (var lifetimeScope = container.BeginLifetimeScope())
+                var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Verbose();
+                if (container.TryResolve<ILogEventSink>(out var logEventSink))
                 {
-                    var loggerConfiguration = new LoggerConfiguration().MinimumLevel.Verbose();
-                    if (lifetimeScope.TryResolve<ILogEventSink>(out var logEventSink))
-                    {
-                        loggerConfiguration = loggerConfiguration.WriteTo.Sink(logEventSink);
-                    }
-                    Log.Logger = loggerConfiguration.WriteTo.SQLite("log.db", restrictedToMinimumLevel: LogEventLevel.Warning).CreateLogger();
-                    lifetimeScope.Resolve<IAOIMain>().Run();
-                    Log.CloseAndFlush();
+                    loggerConfiguration = loggerConfiguration.WriteTo.Sink(logEventSink);
                 }
+                Log.Logger = loggerConfiguration.WriteTo.SQLite("log.db", restrictedToMinimumLevel: LogEventLevel.Warning).CreateLogger();
+                container.Resolve<IAOIMain>().Run();
+                Log.CloseAndFlush();
             }
         }
     }
