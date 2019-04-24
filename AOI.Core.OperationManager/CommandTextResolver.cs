@@ -27,6 +27,7 @@ namespace AOI.Core.OperationManager
             }
             if (i == length)
             {
+                this.Log().Info($"命令-{commandText}-无法识别");
                 return;
             }
             var operationName = new StringBuilder();
@@ -40,6 +41,11 @@ namespace AOI.Core.OperationManager
                 }
                 operationName.Append(c);
                 i++;
+            }
+            if(operationName.Length == 0)
+            {
+                this.Log().Info("无法解析操作");
+                return;
             }
             _operationInvoker.InvokeOperation(operationName.ToString());
         }
