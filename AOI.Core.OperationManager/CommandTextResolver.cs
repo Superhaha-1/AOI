@@ -1,5 +1,6 @@
 ﻿using AOI.Core.Interfaces;
 using Splat;
+using System.Text;
 
 namespace AOI.Core.OperationManager
 {
@@ -12,16 +13,35 @@ namespace AOI.Core.OperationManager
             _operationInvoker = operationInvoker;
         }
 
-        void ICommandTextResolver.Resolve(string operationText)
+        void ICommandTextResolver.Resolve(string commandText)
         {
-            operationText = operationText.Trim();
-            var texts = operationText.Split(' ');
-            if (texts.Length == 0)
+            int i = 0;
+            int length = commandText.Length;
+            while (i < length)
             {
-                this.Log().Info("没有可用的命令");
+                if (commandText[i] == '-')
+                {
+                    break;
+                }
+                i++;
+            }
+            if (i == length)
+            {
                 return;
             }
-            _operationInvoker.InvokeOperation(texts[0]);
+            var operationName = new StringBuilder();
+            i++;
+            while (i < length)
+            {
+                var c = commandText[i];
+                if (c == ' ')
+                {
+                    break;
+                }
+                operationName.Append(c);
+                i++;
+            }
+            _operationInvoker.InvokeOperation(operationName.ToString());
         }
-    }
+    } 
 }
