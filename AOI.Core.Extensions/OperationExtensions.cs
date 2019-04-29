@@ -91,7 +91,7 @@ namespace AOI.Core.Extensions
 
         string IOperationParameterBuilder.Description => _description;
 
-        private Action<TOperation, TValue> _set;
+        private readonly Action<TOperation, TValue> _set;
 
         void IOperationParameterBuilder.SetParameter(IOperation operation, object parameter)
         {
